@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// SQLite keeps the demo zero-config. To use Postgres, change provider to
+// "postgresql" and point DATABASE_URL at your database.
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Project {
+  id          String     @id @default(cuid())
+  slug        String     @unique
+  name        String
+  location    String
+  tagline     String
+  description String
+  image       String
+  highlights  String     @default("[]") // JSON string[]
+  featured    Boolean    @default(true)
+  sortOrder   Int        @default(0)
+  properties  Property[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Property {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  purpose     String    @default("Sale") // Sale | Rent
+  type        String    @default("Plot") // Plot | House | Villa | Apartment | Commercial
+  status      String    @default("Available") // Available | Under Offer | Sold
+  price       Float
+  areaValue   Float
+  areaUnit    String    @default("Marla") // Marla | Kanal | Sq. Ft.
+  beds        Int       @default(0)
+  baths       Int       @default(0)
+  location    String
+  city        String    @default("Islamabad")
+  description String
+  features    String    @default("[]") // JSON string[]
+  images      String    @default("[]") // JSON string[]
+  featured    Boolean   @default(false)
+  verified    Boolean   @default(true)
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  inquiries   Inquiry[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Guide {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  excerpt    String
+  content    String
+  coverImage String
+  category   String   @default("Buying Guide")
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  quote     String
+  rating    Int      @default(5)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Inquiry {
+  id         String    @id @default(cuid())
+  name       String
+  phone      String
+  email      String    @default("")
+  message    String
+  interest   String    @default("General")
+  status     String    @default("New") // New | Contacted | Closed
+  propertyId String?
+  property   Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  createdAt  DateTime  @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}

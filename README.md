@@ -55,4 +55,14 @@ For a production build: `npm run build && npm start`.
 
 ## Deploying
 
-SQLite and local uploads need a server with a persistent disk (a VPS, Railway or Render with a volume). For Vercel, switch Prisma to Postgres (e.g. Neon) and move uploads to object storage.
+### One click on Render (free)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/hamza2130/Estate2)
+
+Sign in to Render with GitHub, allow access to this repo, and click **Apply**. `render.yaml` sets everything up and the site goes live at `https://autostack-ai-estate2.onrender.com` (or a similar name Render assigns). Admin login: `admin@autostack.ai` / `admin123`.
+
+On Render's free plan the server sleeps after 15 idle minutes (the first visit after that takes about a minute), and the SQLite file is reset when it restarts, so admin edits go back to the demo content. Add a persistent disk (paid) mounted at the project folder to keep changes.
+
+### Elsewhere
+
+SQLite and local uploads need a server with a persistent disk (a VPS, Railway or Render with a disk). For Vercel, switch Prisma to Postgres (e.g. Neon) and move uploads to object storage.

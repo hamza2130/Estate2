@@ -1,0 +1,21 @@
+# One-click deploy: https://render.com/deploy?repo=https://github.com/hamza2130/Estate2
+services:
+  - type: web
+    name: autostack-ai-estate2
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    # setup is idempotent: it creates the SQLite database and demo content if missing
+    startCommand: npm run setup && npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: ADMIN_EMAIL
+        value: admin@autostack.ai
+      - key: ADMIN_PASSWORD
+        value: admin123
